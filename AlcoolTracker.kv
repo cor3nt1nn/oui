@@ -1,0 +1,778 @@
+##:kivy
+WindowManager:
+
+    LoginWindow:
+    
+    SigninWindow:
+
+    HomePage:
+
+    SettingPage:
+
+    MyAlcoholsPage:
+
+    Drinks:
+
+    AddDrink:
+
+    AddAlcohol:
+
+<LoginWindow>:
+    name:"login"
+    user: user
+    Screen:
+        MDCard:
+            size_hint: None, None
+            size: root.width, root.height
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            # padding: 25
+            spacing: 10
+
+            orientation: "vertical"
+
+
+            MDTextField:
+                multiline: False
+                mode: "rectangle"
+                hint_text: "username"
+                icon_right: "account"
+                id:user
+                size_hint_x: None
+                width: 700
+                height: 200
+                font_size: 50
+                pos_hint: {"center_x": 0.5}
+
+            MDRoundFlatButton:
+                text: "Connexion"
+                font_size: 40
+                pos_hint: {'center_x': 0.5}
+                height: 50
+                on_press: 
+                    root.login()
+
+            MDRoundFlatButton:
+                text: "Nouvel Utilisateur"
+                font_size: 40
+                pos_hint: {'center_x': 0.5}
+                height: 50
+                on_release: app.root.current = "signin"
+            Widget:
+                size_hint_y: None
+                height: 200
+
+
+<SigninWindow>:
+    name:"signin"
+    username: username
+    weight: slider_label
+    Screen:
+        orientation:"vertical"
+        
+
+        MDCard:
+            orientation: "vertical"
+            padding: 50
+            spacing: 30
+            
+            Widget:
+                size_hint_y: None
+                height: 75
+                
+            MDTextField:
+                multiline: False
+                mode: "rectangle"
+                hint_text: "Nouvel Utilisateur"
+                icon_right: "account"
+                id:username
+                halign: 'center'
+                size_hint_x: None
+                width: 600
+                font_size: 70
+                pos_hint: {"center_x": 0.5,"center_y": 0.5}
+
+
+            MDLabel:
+                text: "Entres ton poids!"
+                halign: 'center'
+                font_size: 50
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.5
+            MDLabel:
+                id: slider_label
+                text: "0"
+                halign: 'center'
+                font_size: 70
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.1
+                italic: True
+
+            Slider:
+                id:slider
+                min: 0
+                max: 190
+                step: 1
+                orientation: "horizontal"
+                on_value: root.slide_it(*args)
+                size_hint_y:1
+
+            GridLayout:
+                cols: 4
+
+                MDLabel:
+                    text: "Homme"
+                    font_size: 50
+                    size_hint_y:0.1
+
+                CheckBox:
+                    id: checkbox_homme
+                    size_hint_y:0.1
+                    on_active:  
+                        root.enable_button()
+                        root.homme_click(self, self.active)
+                        root.disable_button()
+                        
+                
+                MDLabel:
+                    text: "Femme"
+                    font_size: 50
+                    size_hint_y:0.1
+
+                CheckBox:
+                    id: checkbox_femme
+                    size_hint_y:0.1
+                    on_active: 
+                        root.enable_button()
+                        root.femme_click(self, self.active)
+                        root.disable_button()
+                        
+                                
+
+            GridLayout:
+                cols: 2
+                MDLabel:
+                    
+                    text: "Permis Probatoire ?"
+                    font_size: 50
+                    size_hint_y:0.1
+                CheckBox:
+                    id:checkbox_permis
+                    size_hint_y:0.1
+                    on_active: root.permis_click(self, self.active)
+            
+            Widget:
+                size_hint_y: None
+                height: 75
+            
+
+            MDRoundFlatButton:
+                text: "Valider"
+                pos_hint: {'center_x': 0.5}
+                font_size:70
+                size_hint: (None, None)
+                on_press:   
+                    root.press()
+                width: 250
+                height: 100
+            
+            MDRoundFlatButton:
+                text: "Retour"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size:50
+                on_press:
+                    app.root.current = "login"
+                width: 250
+                height: 100
+
+<HomePage>:
+    name:"home"
+    username:username
+    alcoolemie:alcoolemie
+    symptomes:symptomes
+    info:info
+    Screen:
+        orientation: "vertical"
+        size: root.height, root.width
+        padding: 50
+        spacing: 30
+        MDCard:
+            orientation: "vertical"
+            size: root.height, root.width
+            padding: 50
+            spacing: 10
+            Label:
+                id:username
+                text: ""
+                font_size: 70
+                color: (1,1,1,1)
+                halign: "center"
+                size_hint: (1, 0.3)
+                canvas.before:
+                    Color:
+                        rgba: (0,0,0,0)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            Button:
+                text: "Paramètres"
+                font_size: 70
+                color: (0,0,0,1)
+                size_hint: (1, 0.2)
+                width: 300
+                height: 60
+                on_press:
+                    app.root.current = "settings"
+                canvas.before:
+                    Color:
+                        rgba: (171/255, 167/255, 167/255,0.5)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            Button:
+                text: "Déconnexion"
+                font_size: 70
+                color: (0,0,0,1)
+                size_hint: (1, 0.2)
+                width: 300
+                height: 60
+                on_press:
+                    root.logout()
+                    app.root.current = "login"
+                canvas.before:
+                    Color:
+                        rgba: (171/255, 167/255, 167/255,0.5)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            Button:
+                text: "Mettre à jour"
+                font_size: 70
+                color: (0,0,0,1)
+                size_hint: (1, 0.2)
+                width: 300
+                height: 60
+                on_press:
+                    root.update()
+                canvas.before:
+                    Color:
+                        rgba: (171/255, 167/255, 167/255,0.5)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            MDLabel:
+                id:alcoolemie
+                text: "0.0g/L"
+                font_size: 150
+                color: (0,0,0,1)
+                halign: "center"
+                canvas.before:
+                    Color:
+                        rgba: (171/255, 167/255, 167/255,1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            Widget:
+                size_hint_y: None
+                height: 25
+
+            Label:
+                text: "Symptômes Possibles:"
+                font_size: 60
+                color: (1,1,1,1)
+                halign: "center"
+                size_hint: (1, 0.3)
+                italic: True
+                canvas.before:
+                    Color:
+                        rgba: (0,0,0,0)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            MDLabel:
+                id:symptomes
+                text: ""
+                font_size: 60
+                color: (1,1,1,1)
+                halign: "center"
+                size_hint: (1, 0.3)
+                canvas.before:
+                    Color:
+                        rgba: (0,0,0,0)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            Widget:
+                size_hint_y: None
+                height: 25
+
+            MDLabel:
+                id: info
+                text: ""
+                font_size: 70
+                color: (0,0,0,1)
+                halign: "center"
+                size_hint: (1, 1)
+                canvas.before:
+                    Color:
+                        rgba: (217/255, 104/255, 85/255,1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            Button:
+                text: "Mes Alcools"
+                font_size: 70
+                color: (1,1,1,1)
+                halign:'center'
+                background_color: (211/255, 187/255, 252/255,1)
+                on_press:
+                    app.root.current="alcohols"
+                
+            
+            MDCard:
+                orientation: "horizontal"
+                size: root.height, root.width
+                cols: 2
+                padding: 10
+                spacing: 20
+                size_hint: (1, 1)
+                Button:
+                    text: "Voir Consos"
+                    font_size: 50
+                    color: (1,1,1,1)
+                    background_color:(128/255, 242/255, 223/255,1)
+                    on_press:
+                        app.root.current="drinks"
+
+                
+                Button:
+                    text: "Ajouter Conso"
+                    font_size: 50
+                    color: (1,1,1,1)
+                    background_color: (128/255, 242/255, 223/255,1)
+                    on_press:
+                        app.root.current="adddrink"
+
+<SettingPage>:
+    name:"settings"
+    username: username
+    weight: slider_label
+    checkbox_homme: checkbox_homme
+    checkbox_femme:checkbox_femme
+    checkbox_permis:checkbox_permis
+    Screen:
+        orientation:"vertical"
+        MDCard:
+            orientation: "vertical"
+            padding: 50
+            spacing: 30
+            
+            Widget:
+                size_hint_y: None
+                height: 75
+            
+            MDRoundFlatButton:
+                text: "Complete with your infos"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size: 40  
+                on_press:
+                    root.update()
+                width: 150
+                height: 60
+            MDTextField:
+                multiline: False
+                mode: "rectangle"
+                hint_text: "Username"
+                icon_right: "account"
+                id: username
+                halign: 'center'
+                size_hint_x: None
+                width: 600
+                font_size: 70
+                pos_hint: {"center_x": 0.5,"center_y": 0.5}
+
+
+            MDLabel:
+                text: "Modifie ton poids!"
+                halign: 'center'
+                font_size: 40
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.5
+            MDLabel:
+                id: slider_label
+                text: "0"
+                halign: 'center'
+                font_size:50
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.1
+                italic: True
+
+            Slider:
+                id:slider
+                min: 0
+                max: 190
+                step: 1
+                orientation: "horizontal"
+                on_value: root.slide_it(*args)
+                size_hint_y:1
+
+            GridLayout:
+                cols: 4
+
+                MDLabel:
+                    text: "Homme"
+                    font_size: 50
+                    size_hint_y:0.1
+
+                CheckBox:
+                    id: checkbox_homme
+                    size_hint_y:0.1
+                    on_active:  
+                        root.enable_button()
+                        root.homme_click(self, self.active)
+                        root.disable_button()
+                        
+                
+                MDLabel:
+                    text: "Femme"
+                    font_size: 50
+                    size_hint_y:0.1
+
+                CheckBox:
+                    id: checkbox_femme
+                    size_hint_y:0.1
+                    on_active: 
+                        root.enable_button()
+                        root.femme_click(self, self.active)
+                        root.disable_button()
+                        
+                                
+
+            GridLayout:
+                cols: 2
+                MDLabel:
+                    
+                    text: "Permis Probatoire ?"
+                    font_size: 60
+                    size_hint_y:0.1
+                CheckBox:
+                    id:checkbox_permis
+                    size_hint_y:0.1
+                    on_active: root.permis_click(self, self.active)
+
+            
+            MDRoundFlatButton:
+                text: "Valider"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size: 60
+                on_press:
+                    root.press()
+                width: 150
+                height: 60
+
+            MDRoundFlatButton:
+                text: "Retour"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size: 40
+                on_press:
+                    app.root.current = "home"
+                width: 150
+                height: 60
+
+            
+
+            MDRoundFlatButton:
+                text: "Supprimer Utilisateur"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size: 40
+                on_press:
+                    root.delete()
+                    app.root.current = "login"
+                width: 150
+                height: 60
+            
+
+<MyAlcoholsPage>:
+    name:"alcohols"
+    container:container
+    Screen:
+        orientation: "vertical"
+        size: root.height, root.width
+        padding: 50
+        spacing: 30
+        MDCard:
+            orientation: "vertical"
+            size: root.height, root.width
+            Button:
+                text: "Retour"
+                font_size: 50
+                size_hint: (1, 0.1)
+                color: (1,1,1,1)
+                on_press: app.root.current="home"
+            Button:
+                text: "Ajouter un Alcool"
+                font_size: 50
+                size_hint: (1, 0.1)
+                color: (1,1,1,1)
+                on_press: app.root.current="addalc"
+            Button:
+                text: "Cliquer pour actualiser"
+                font_size: 50
+                size_hint: (1, 0.1)
+                color: (1,1,1,1)
+                on_release: root.update_list()
+            Label:
+                text:"Cliquez sur la boisson pour supprimer"
+                size_hint: (1, 0.1)
+
+            MDScrollView:
+                MDList:
+                    id: container
+    
+<Drinks>:
+    name:"drinks"
+    container:container
+    Screen:
+        orientation: "vertical"
+        size: root.height, root.width
+        padding: 50
+        spacing: 30
+        MDCard:
+            orientation: "vertical"
+            size: root.height, root.width
+            Button:
+                text: "Retour"
+                font_size: 50
+                size_hint: (1, 0.1)
+                color: (1,1,1,1)
+                on_press: app.root.current="home"
+            Button:
+                text: "Cliquer pour actualiser"
+                font_size: 50
+                size_hint: (1, 0.1)
+                color: (1,1,1,1)
+                on_release: root.on_start()
+            Label:
+                text:"Cliquez sur la consommation pour supprimer"
+                size_hint: (1, 0.1)
+
+            MDScrollView:
+                MDList:
+                    id: container
+
+<AddDrink>:
+    name:'adddrink'
+    alcname: alcname
+    dosebar:dosebar
+    alcvolume: alcvolume
+    duration:slider_label
+    repas:slider_label_repas
+    time:time_label
+    date:date_label
+    Screen:
+        orientation:"vertical"
+        MDCard:
+            orientation: "vertical"
+            padding: 50
+            spacing: 30
+            
+                
+            MDTextField:
+                multiline: False
+                mode: "rectangle"
+                hint_text: "Name"
+                id: alcname
+                halign: 'center'
+                size_hint_x: None
+                width: 600
+                font_size: 60
+                pos_hint: {"center_x": 0.5,"center_y": 0.1}
+
+
+            #mettre time picker
+            MDRaisedButton:
+                id: time_label
+                text: root.set_txttime()
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_release: root.show_time_picker()
+
+            #datepicker
+            MDRaisedButton:
+                id: date_label
+                text: root.datetext()
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_release: root.show_date_picker()
+
+            MDLabel:
+                text: "Entres la durée de consommation (en min)"
+                halign: 'center'
+                font_size: 40
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.5
+            MDLabel:
+                id: slider_label
+                text: "0"
+                halign: 'center'
+                font_size: 50
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.1
+                italic: True
+            Slider:
+                id:slider
+                min: 0
+                max: 120
+                step: 5
+                orientation: "horizontal"
+                on_value: root.slide_it(*args)
+                size_hint_y:1
+            
+            MDLabel:
+                text: "Si tu as mangé, entre la consistence de ton repas"
+                halign: 'center'
+                font_size: 40
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.5
+            MDLabel:
+                id: slider_label_repas
+                text: "0%"
+                halign: 'center'
+                font_size: 50
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.1
+                italic: True
+            Slider:
+                id:slider
+                min: 0
+                max: 100
+                step: 20
+                orientation: "horizontal"
+                on_value: root.slide_it_meal(*args)
+                size_hint_y:1
+            Widget:
+                size_hint_y: None
+                height: 15
+            GridLayout:
+                cols: 2
+
+                MDLabel:
+                    text: "Dose Bar"
+                    font_size: 40
+                    size_hint_y:0.1
+
+                CheckBox:
+                    id: dosebar
+                    size_hint_y:0.1
+                    on_active:  
+                        root.enable_volume()
+                        root.bar_click(self, self.active)
+                        root.disable_volume()
+
+            MDTextField:
+                multiline: False
+                mode: "rectangle"
+                hint_text: "Volume d'alcool en mL"
+                id: alcvolume
+                halign: 'center'
+                size_hint_x: None
+                width: 600
+                font_size: 20
+                pos_hint: {"center_x": 0.5,"center_y": 0.1}                 
+
+            
+            MDRoundFlatButton:
+                text: "Valider"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size: 60
+                on_press:
+                    root.on_press()
+                width: 150
+                height: 60
+
+            MDRoundFlatButton:
+                text: "Retour"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size: 40
+                on_press:
+                    app.root.current = "home"
+                width: 150
+                height: 60
+
+<AddAlcohol>:
+    name:'addalc'
+    newalcname: alcname
+    newconcentration:slider_label
+    Screen:
+        orientation:"vertical"
+        MDCard:
+            orientation: "vertical"
+            padding: 50
+            spacing: 30
+            
+            Widget:
+                size_hint_y: None
+                height: 75
+                
+            MDTextField:
+                multiline: False
+                mode: "rectangle"
+                hint_text: "Nom d'utilisateur"
+                id: alcname
+                halign: 'center'
+                size_hint_x: None
+                width: 600
+                font_size: 70
+                pos_hint: {"center_x": 0.5,"center_y": 0.1}
+
+
+            MDLabel:
+                text: "Entres la concentration en alcool"
+                halign: 'center'
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.5
+            MDLabel:
+                id: slider_label
+                text: "0"
+                halign: 'center'
+                font_size: 50
+                pos_hint: {"center_x": 0.5,"center_y": 0.9}
+                size_hint_y:0.1
+                italic: True
+
+            Slider:
+                id:slider
+                min: 0
+                max: 100
+                step: 0.5
+                orientation: "horizontal"
+                on_value: root.slide_it(*args)
+                size_hint_y:0.1
+
+            MDRoundFlatButton:
+                text: "Valider"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                font_size: 60
+                on_press:
+                    root.submit()
+                width: 150
+                height: 60
+            
+            MDRoundFlatButton:
+                text: "Retour"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)                
+                font_size: 40
+                on_press:
+                    app.root.current = "alcohols"
+                width: 150
+                height: 60
